@@ -13,7 +13,7 @@ df = pd.DataFrame()
 
 # Define the time period for which to fetch the data (last 1 year for current data, 3+ years for historical percentiles)
 # Adjust years_back_history for percentile calculation history
-years_back_current = 1 # For displaying recent data
+years_back_current = 1 # For displaying recent data in future
 years_back_history = 3 # For percentile calculations (as per spec: 1-3Y history)
 
 end = datetime.datetime.now()
@@ -181,7 +181,7 @@ def color_trend(val):
 
 
 # A. Core Visualizations: Traffic Light Alert Panel
-st.header("1. Traffic Light Alert Panel")
+st.header(f"1. Traffic Light Alert Panel ({years_back_history}-Year Percentile)")
 
 # Filter for only commodities with an actual alert (Red or Green)
 alerted_commodities = latest_alerts[latest_alerts['Alert'] != 'Gray: Neutral'].copy()
@@ -216,7 +216,7 @@ else:
 st.markdown("---")
 
 # Historical Percentile Chart and Top Alerts Table
-st.header("2. Detailed Analysis")
+st.header(f"2. Detailed Analysis ({years_back_history}-Year Percentile)")
 
 selected_commodity = st.selectbox(
     "Select a Commodity for Detailed Chart:",
@@ -363,14 +363,14 @@ st.dataframe(
 )
 
 st.markdown("---")
-st.subheader("Next Steps & Enhancements")
-st.markdown("""
-- **Price Overlay:** Integrate live futures prices from external APIs (e.g., Alpha Vantage, Polygon.io, or specialized data providers like Databento for futures) to correlate COT extremes with price action. This would likely involve fetching daily or weekly price data and aligning it with the COT report dates.
-- **Email Alerts:** Set up a scheduled job (e.g., using AWS Lambda and EventBridge, or a simple Python script with `smtplib` and a scheduler like `APScheduler`) to send weekly email summaries of new extreme alerts.
-- **Backtesting Signals:** Develop a module to backtest the historical performance of "Overbought" and "Oversold" signals. This would involve analyzing subsequent price movements after a signal is triggered.
-- **Database Integration:** For persistent storage of historical COT data and faster retrieval, consider using SQLite (for simpler local use) or PostgreSQL (for a more robust, scalable solution) as mentioned in the project spec. Streamlit has built-in `st.connection` for databases.
-- **Deployment:** For a shareable web app, deploying on platforms like Streamlit Community Cloud (simplest for Streamlit apps), AWS EC2, or a containerized service like AWS Fargate/ECS with a CI/CD pipeline (more complex but robust) would be the next step. AWS Lambda is suitable for the data processing backend for weekly updates, less so for the entire interactive Streamlit dashboard directly.
-""")
+# st.subheader("Next Steps & Enhancements")
+# st.markdown("""
+# - **Price Overlay:** Integrate live futures prices from external APIs (e.g., Alpha Vantage, Polygon.io, or specialized data providers like Databento for futures) to correlate COT extremes with price action. This would likely involve fetching daily or weekly price data and aligning it with the COT report dates.
+# - **Email Alerts:** Set up a scheduled job (e.g., using AWS Lambda and EventBridge, or a simple Python script with `smtplib` and a scheduler like `APScheduler`) to send weekly email summaries of new extreme alerts.
+# - **Backtesting Signals:** Develop a module to backtest the historical performance of "Overbought" and "Oversold" signals. This would involve analyzing subsequent price movements after a signal is triggered.
+# - **Database Integration:** For persistent storage of historical COT data and faster retrieval, consider using SQLite (for simpler local use) or PostgreSQL (for a more robust, scalable solution) as mentioned in the project spec. Streamlit has built-in `st.connection` for databases.
+# - **Deployment:** For a shareable web app, deploying on platforms like Streamlit Community Cloud (simplest for Streamlit apps), AWS EC2, or a containerized service like AWS Fargate/ECS with a CI/CD pipeline (more complex but robust) would be the next step. AWS Lambda is suitable for the data processing backend for weekly updates, less so for the entire interactive Streamlit dashboard directly.
+# """)
 
 # To run this Streamlit app:
 # 1. Save the code as a Python file (e.g., `cot_dashboard.py`).
